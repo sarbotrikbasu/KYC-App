@@ -1,7 +1,8 @@
+import os
 import streamlit as st
 import requests
 
-BACKEND_URL = "http://217.154.154.252:8002"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://217.154.154.252:8002")
 
 st.set_page_config(page_title="KYC Verification Portal", page_icon="🪪", layout="centered")
 
@@ -33,8 +34,10 @@ def call_backend(method: str, path: str, **kwargs):
         except ValueError:
             # Non-JSON body (e.g. unhandled 500 returning plain text)
             return {"detail": f"Backend error (HTTP {resp.status_code}): {resp.text[:500]}"}, resp.status_code
-    except requests.exceptions.ConnectionError:
-        return {"detail": "Cannot connect to backend. Ensure FastAPI is running on port 8000."}, 503
+    except requests.exceptions.ConnectionError as exc:
+        return {
+            "detail": f"Cannot connect to backend at {BACKEND_URL}. Ensure the FastAPI service is running and reachable. Original error: {exc}"
+        }, 503
 
 
 # ══════════════════════════════════════════════════════════════════════════════
