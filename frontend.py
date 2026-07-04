@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-BACKEND_URL = "http://localhost:8000"
+BACKEND_URL = "http://217.154.154.252:8002/kyc.py"
 
 st.set_page_config(page_title="KYC Verification Portal", page_icon="🪪", layout="centered")
 
